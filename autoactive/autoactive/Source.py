@@ -1,4 +1,4 @@
-from archive.Fileobject import Fileobject
+from autoactive.archive.Fileobject import Fileobject
 
 
 class Source(Fileobject):
