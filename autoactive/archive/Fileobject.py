@@ -1,8 +1,8 @@
-from archive.Dataobject import Dataobject
-from datastructures.FileInfo import FileInfo
+from autoactive.archive.Dataobject import Dataobject
+from autoactive.datastructures.FileInfo import FileInfo
 import os
 import numpy as np
-from autoactive.Folder import Folder
+from autoactive.autoactive.Folder import Folder
 
 class Fileobject(Dataobject):
 

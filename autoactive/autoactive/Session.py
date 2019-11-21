@@ -1,9 +1,9 @@
 from datetime import datetime
-from archive.Dataobject import Dataobject
+from autoactive.archive.Dataobject import Dataobject
 import uuid
 import platform
 import os
-from autoactive.AutoActivePythonVersion import Toolboxversion
+from autoactive.autoactive.AutoActivePythonVersion import Toolboxversion
 from copy import copy
 
 class Session(Dataobject):
