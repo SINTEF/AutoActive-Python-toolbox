@@ -1,5 +1,6 @@
 import pandas as pd
 from autoactive.archive.Dataobject import Dataobject
+import numpy as np
 
 
 class Properties():
@@ -70,13 +71,27 @@ class Table(Dataobject):
             properties = Properties(columnNames)
             self.user = {'Data':  pd.DataFrame(data, columns= columnNames),
                         'properties': properties.getProperties()}
+            self.user['data'] = self.setDatatypes(self.user['Data'])
         else:
             properties = Properties(df.columns.tolist())
             self.user = {'Data': df,
                          'properties': properties.getProperties()}
 
+    def setDatatypes(self, df):
+        for columnName in df.columns:
+            columnData = df[columnName].values[::100]
+            try:
+                if np.array_equal(columnData, columnData.astype('int64')) == True:
+                    df[columnName] = df.astype('int64')
+                else:
+                    df[columnName] = df[columnName].astype('float64')
+            except ValueError:
+                df[columnName] = df[columnName].astype(str)
+        return df
+
 
     def toSerializable(self, **kwargs):
+
 
         ''' Method which transforms the table object to a
         serializable object

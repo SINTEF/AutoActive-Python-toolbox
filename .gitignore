@@ -1,2 +1,8 @@
 __pycache__
 autoactive/.idea/
+.idea/.gitignore
+.idea/autoactive-python.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/inspectionProfiles/profiles_settings.xml

@@ -111,12 +111,13 @@ class AutoActiveWriter:
 
         columnNames = table.columns.tolist()
         fields = list()
-
         for name in columnNames:
-            if name == 'Time':
+            if str(table[name].dtype) == 'int64':
                 dtype = pa.int64()
-            else:
+            elif str(table[name].dtype) == 'float64':
                 dtype = pa.float64()
+            else:
+                dtype = pa.string()
             fields.append((name, dtype, False))
 
         schema = pa.schema(fields)
