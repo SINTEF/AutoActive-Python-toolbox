@@ -24,7 +24,7 @@ class FileInfo():
 
         self._fileInfo['name'] = os.path.basename(fNameFull)
         self._fileInfo['folder'] = os.path.dirname(fNameFull)
-        self._fileInfo['date'] = datetime.fromtimestamp(mtime).strftime('%Y-%m-%d-%H:%M:%S')
+        self._fileInfo['date'] = datetime.fromtimestamp(mtime).strftime('%Y-%b-%d %H:%M:%S')
         self._fileInfo['bytes'] = stats.st_size
         self._fileInfo['isdir'] = os.path.isdir(fNameFull)
         self._fileInfo['datenum'] = datetime.fromtimestamp(mtime).toordinal() + 366

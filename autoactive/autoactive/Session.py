@@ -22,7 +22,7 @@ class Session(Dataobject):
         self.user = dict()
         self.meta = {'type':'no.sintef.session', 'version':1}
         self.meta['id'] = 'Not saved'
-        self.user['created'] = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+        self.user['created'] = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3] + '+01:00'
         self.user['name'] = sessionName
         self.sessionState = self._sessionStateInit
         self.basedOn = dict()
