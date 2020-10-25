@@ -3,16 +3,16 @@ from autoactive.archive.Fileobject import Fileobject
 
 class Source(Fileobject):
 
-    ''' Class containing information about the source file.
-        Meaning information about the main python file '''
+    """ Class containing information about the source file.
+        Meaning information about the main python file """
 
     def __init__(self):
-        self.meta = {'type':'no.sintef.source', 'version':1}
+        self.meta = {"type": "no.sintef.source", "version": 1}
         self.user = dict()
 
     def addContentFromFileToArchive(self, fNameFull):
 
-        ''' Method which saves content from file to the aaz file.
+        """ Method which saves content from file to the aaz file.
             Inherits functionality from addContentFromFileToArchive
             in parent class
 
@@ -20,11 +20,8 @@ class Source(Fileobject):
             fNameFull (str) : The full path of the file
 
         :returns
-            selfObj (source) : Returns the source object '''
+            selfObj (source) : Returns the source object """
 
         selfObj = super().addContentFromFileToArchive(fNameFull)
-        selfObj.user['language'] = 'PYTHON'
+        selfObj.user["language"] = "PYTHON"
         return selfObj
-
-
-
