@@ -1,8 +1,11 @@
-from autoactive.autoactive.Folder import Folder
-from autoactive.autoactive.Session import Session
-from autoactive.datastructures.Table import Table
-from autoactive.autoactive.Source import Source
-import autoactive.autoactive.ArchiveWriter as ArchiveWriter
+import sys
+sys.path.insert(0, "..")
+
+from autoactive.autoactive.folder import Folder
+from autoactive.autoactive.session import Session
+from autoactive.datastructures.table import Table
+from autoactive.autoactive.source import Source
+import autoactive.autoactive.archive_writer as ArchiveWriter
 import os
 import __main__
 import numpy as np

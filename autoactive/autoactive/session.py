@@ -1,9 +1,9 @@
 from datetime import datetime
-from autoactive.archive.Dataobject import Dataobject
+from autoactive.archive.data_object import Dataobject
 import uuid
 import platform
 import os
-from autoactive.autoactive.AutoActivePythonVersion import Toolboxversion
+from autoactive.autoactive.autoactive_python_version import Toolboxversion
 from copy import copy
 
 

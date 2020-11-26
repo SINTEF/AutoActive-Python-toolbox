@@ -1,4 +1,4 @@
-from autoactive.archive.Dataobject import Dataobject
+from autoactive.archive.data_object import Dataobject
 
 
 class Folder(Dataobject):

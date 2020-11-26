@@ -1,5 +1,5 @@
 import pandas as pd
-from autoactive.archive.Dataobject import Dataobject
+from autoactive.archive.data_object import Dataobject
 import numpy as np
 
 
