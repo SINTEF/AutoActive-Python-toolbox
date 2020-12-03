@@ -1,80 +1,51 @@
+from autoactive.archive.dataobject import Dataobject
+from autoactive.toolboxinfo import toolbox_version
+
 from datetime import datetime
-from autoactive.archive.data_object import Dataobject
+from dataclasses import dataclass
 import uuid
 import platform
 import os
-from autoactive.autoactive.autoactive_python_version import Toolboxversion
-from copy import copy
 
 
+@dataclass(init=False)
 class Session(Dataobject):
-
-    """ Class containing information about the session """
-
-    _sessionFilename = "AUTOACTIVE_SESSION.json"
-    _sessionStateInit = 1
-    _sessionStateUpdated = 2
-    _sessionStateSaved = 3
-    _sessionStateLoaded = 4
-    _sessionStateTextArr = {"Init", "Updated", "Saved", "Loaded"}
-
-    def __init__(self, sessionName):
-        self.user = dict()
-        self.meta = {"type": "no.sintef.session", "version": 1}
-        self.meta["id"] = "Not saved"
-        self.user["created"] = (
+    def __init__(self, session_name: str):
+        super().__init__()
+        self.meta.type = "no.sintef.session"
+        self.meta.version = 1
+        self.user.created = (
             datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "+01:00"
         )
-        self.user["name"] = sessionName
-        self.sessionState = self._sessionStateInit
-        self.basedOn = dict()
-        self.archiveFilename = "Not saved"
+        self.user.name = session_name
 
-    def save(self, archiveWriter):
+    def save(self, archive_writer):
 
         """ Method saves the session object to the archive
 
         :arg
-            archiveWriter (archiveWriter): object handle to
+            archive_writer (ArchiveWriter): object handle to
             archiveWriter
 
         """
 
-        self.meta["id"] = str(uuid.uuid4())
-        self.meta["based_on"] = []
-
-        [
-            myPlatform,
-            computername,
-            username,
-            addonstring,
-            aaversion,
-        ] = self.locDisplayPythonInformation()
-        self.meta["enviroment"] = {}
-        self.meta["enviroment"]["platform"] = myPlatform
-        self.meta["enviroment"]["computername"] = computername
-        self.meta["enviroment"]["username"] = username
-        self.meta["enviroment"]["addons"] = addonstring
-        self.meta["enviroment"]["autoactive"] = aaversion
-
-        enrichedFolders = copy(self)
-        jsonStruct = enrichedFolders.replaceNatives(
-            archiveWriter=archiveWriter, uuid=self.meta["id"]
+        self.meta.id = str(uuid.uuid4())
+        self.meta.based_on = []
+        self.meta.enviroment = Enviroment().__dict__
+        json_struct = self.replace_natives(
+            archive_writer=archive_writer, uuid=self.meta.id
         )
-        elemName = self.meta["id"] + "/" + self._sessionFilename
-        archiveWriter.writeMetadata(elemName, jsonStruct)
+        elem_name = f"{self.meta.id}/AUTOACTIVE_SESSION.json"
+        archive_writer.write_metadata(elem_name, json_struct)
 
-    def locDisplayPythonInformation(self):
 
-        """ Method gets information about the enviroment
+@dataclass()
+class Enviroment:
 
-        :returns
-            arr (list): Information about the enviroment
-        """
+    """Class containting information about the computer enviroment"""
 
-        myPlatform = platform.platform()
-        computername = os.environ["COMPUTERNAME"]
-        username = os.getlogin()
-        addonstring = ""
-        aaversion = Toolboxversion()
-        return [myPlatform, computername, username, addonstring, aaversion]
+    platform: str = platform.platform()
+    computername: str = os.environ["COMPUTERNAME"]
+    username: str = os.getlogin()
+    addonstring: str = ""
+    aaversion: str = toolbox_version
