@@ -1,37 +1,45 @@
 import sys
-sys.path.insert(0, "..")
+sys.path.insert(0,"..")
 
-from autoactive.autoactive.folder import Folder
-from autoactive.autoactive.session import Session
-from autoactive.datastructures.table import Table
 from autoactive.autoactive.source import Source
-import autoactive.autoactive.archive_writer as ArchiveWriter
-import os
+from autoactive.autoactive.datatable import Datatable
+from autoactive.autoactive.session import Session
+from autoactive.autoactive.folder import Folder
+from autoactive.autoactive.archivewriter import ArchiveWriter
+
 import __main__
+from pathlib import Path
 import numpy as np
 
 so = Source()
-thisPath = str(__main__.__file__)
-so.addContentFromFileToArchive(thisPath)
+this_path = Path(__main__.__file__)
+so.add_content_from_file_to_archive(this_path)
 
-time = np.array(range(0,100000000,100000))
-sine = np.sin(2*3.14*time/1000000)
-cosi = np.cos(2*3.14*time/1000000)
-
+time = np.array(range(0,100000000,100000)).astype("int64")
+sine = np.sin(2*3.14*time/1000000).astype("float64")
+cosi = np.cos(2*3.14*time/1000000).astype("float64")
 time_off = time + 1000000
 
-table = Table(np.transpose([time,sine, cosi]),['Time', 'sine','cosi'])
-table2 = Table(np.transpose([time_off,sine, cosi]),['Time', 'sine','cosi'])
+table = Datatable()
+table.time = time
+table.time.unit = "Epocms"
+table.sine = sine
+table.cosi = cosi
 
-session = Session('Session')
-folder = Folder()
+table_off = Datatable()
+table_off.time = time_off
+table_off.time.unit = "Epocms"
+table_off.sine = sine
+table_off.cosi = cosi
 
-session.addChild('PythonData',folder)
-folder.addChild('PythonTrig', table)
-folder.addChild('PythonoffTrig', table2)
-session.addChild('source', so)
+session = Session(session_name= "Session")
+session.python_data = Folder()
+session.python_data.trig = table
+session.python_data.trig_off = table_off
+session.source = so
 
-aw = ArchiveWriter.AutoActiveWriter(os.getcwd() + '\\' + 'DOESITWORK.aaz')
-aw.saveSession(session)
+write_to = Path.joinpath(this_path.parent, "DOESITWORK.aaz")
+aw = ArchiveWriter(write_to)
+aw.save_session(session)
 aw.close()
 
