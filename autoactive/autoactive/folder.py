@@ -1,10 +1,11 @@
-from autoactive.archive.data_object import Dataobject
+from autoactive.archive.dataobject import Dataobject
+
+from dataclasses import dataclass
 
 
+@dataclass(init=False)
 class Folder(Dataobject):
-
-    """ Class containing information about the folder """
-
     def __init__(self):
-        self.user = dict()
-        self.meta = {"type": "no.sintef.folder", "version": 1}
+        super().__init__()
+        self.meta.type: str = "no.sintef.folder"
+        self.meta.version: int = 1
