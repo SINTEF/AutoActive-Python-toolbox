@@ -1,2 +1,1 @@
-def Toolboxversion():
-    return "Autoactive python v0.1.0"
+toolbox_version = "Autoactive python v0.2.0"
