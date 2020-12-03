@@ -2,16 +2,11 @@ import zipfile as zp
 import pyarrow.parquet as pq
 import pyarrow as pa
 import json
-from dataclasses import dataclass
-from pathlib import Path
 
-
-@dataclass
 class ArchiveWriter:
-    _path: Path = None
 
-    def __post_init__(self):
-        self._file = zp.ZipFile(self._path, "w", allowZip64=True)
+    def __init__(self, path):
+        self._file = zp.ZipFile(path, "w", allowZip64=True)
 
     def open(self, path):
 
