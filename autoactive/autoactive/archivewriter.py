@@ -2,33 +2,16 @@ import zipfile as zp
 import pyarrow.parquet as pq
 import pyarrow as pa
 import json
+from dataclasses import dataclass
+from pathlib import Path
 
 
-class AutoActiveWriter:
+@dataclass
+class ArchiveWriter:
+    _path: Path = None
 
-    """ Writes data from objects to aaz file
-
-    :arg
-        path (str): The complete path of the aaz file
-
-    """
-
-    def __init__(self, path):
-        self._path = path
-        self._file = zp.ZipFile(path, "w", allowZip64=True)
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, trackback):
-        self.close()
-        return False
-
-    def close(self):
-
-        """ Method that destroys the object """
-
-        self._file.close()
+    def __post_init__(self):
+        self._file = zp.ZipFile(self._path, "w", allowZip64=True)
 
     def open(self, path):
 
@@ -48,73 +31,83 @@ class AutoActiveWriter:
         original = self._file.open(path, "w")
         return original
 
-    def writeCopyContentFromFile(self, elemName, data):
+    def close(self):
 
-        """ Method that writes the file to archive
+        """ Method that destroys the object """
 
-        :arg
-            elemName (str): The complete path in archive
+        self._file.close()
 
-            data (str): The complete path of the data to write to archive
-
-        """
-
-        self._file.write(elemName, data)
-
-    def saveSession(self, sessionHandle):
+    def save_session(self, session_handle):
 
         """ Method saving the session to archive
 
         :arg
-            sessionHandle (Session): The session object
+            session_handle (Session): The session object
 
         """
 
-        sessionHandle.save(self)
+        session_handle.save(self)
 
-    def writeMetadata(self, elemName, jsonStruct):
+    def write_metadata(self, elem_name, json_struct):
 
         """ Method saving json object to archive
 
         :arg
-            elemName (str): The complete path in archive where
+            elem_name (str): The complete path in archive where
             the json object is stored
 
             jsonStruct (dict): serialiable object
 
         """
 
-        with self.open(elemName) as file:
-            file.write(json.dumps(jsonStruct).encode("utf-8"))
+        with self.open(elem_name) as file:
+            file.write(json.dumps(json_struct).encode("utf-8"))
 
-    def writeTable(self, elemName, table):
+    def write_table(self, elem_name, table):
 
         """ Method transforming table object to
             parquet object and stores it in the archive.
 
         :arg
-            elemName(str): The complete path in archive where
+            elem_name (str): The complete path in archive where
             the table object is stored
 
-            table (table): The table object
+            table (Datatable): The table object
 
         """
 
-        columnNames = table.columns.tolist()
-        fields = list()
-        for name in columnNames:
-            if str(table[name].dtype) == "int64":
-                dtype = pa.int64()
-            elif str(table[name].dtype) == "float64":
-                dtype = pa.float64()
-            else:
-                dtype = pa.string()
-            fields.append((name, dtype, False))
-
+        column_names = table.column_names
+        a = table.dtypes
+        types = list(map(to_parquet_types, table.dtypes))
+        fields = [(n, t, False) for n, t in zip(column_names, types)]
         schema = pa.schema(fields)
-        table = pa.Table.from_pandas(table, schema)
+        table = pa.Table.from_pandas(table.as_dataframe, schema)
 
-        with self.open(elemName) as file:
-            parquetWriter = pq.ParquetWriter(file, schema)
-            parquetWriter.write_table(table)
-            parquetWriter.close()
+        with self.open(elem_name) as file:
+            parquet_writer = pq.ParquetWriter(file, schema)
+            parquet_writer.write_table(table)
+            parquet_writer.close()
+
+    def copy_content_from_file(self, elem_name, data):
+        self._file.write(elem_name, data)
+
+
+def to_parquet_types(type):
+
+    """Method for converting native types
+    into parquet types
+
+    :arg
+        type (Type) :
+
+    :return:
+        dtype (Parquet type) :
+
+    """
+    if str(type) == "int64":
+        dtype = pa.int64()
+    elif str(type) == "float64":
+        dtype = pa.float64()
+    else:
+        dtype = pa.string()
+    return dtype
