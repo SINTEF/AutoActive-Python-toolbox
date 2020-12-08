@@ -1,7 +1,15 @@
-import zipfile as zp
 from autoactive.autoactive.session import Session
+from autoactive.autoactive.folder import Folder
+from autoactive.autoactive.datatable import Datatable
+from autoactive.datastructures.video import Video
+from autoactive.autoactive.source import Source
+
 from dataclasses import dataclass
 import json
+import zipfile as zp
+import pyarrow.parquet as pq
+import io
+
 
 @dataclass(frozen=True)
 class ArchiveOverview():
@@ -34,6 +42,13 @@ class ArchiveReader():
         original = self._file.open(path, "r")
         return original
 
+    def read_table(self, elem_name):
+        buffer = io.BytesIO()
+        with self.read(elem_name) as file:
+            buffer.write(file.read())
+        df = pq.read_table(buffer).to_pandas()
+        return df
+
     def list_ids(self):
         fnames = self._file.namelist()
         session_names = [fname.split("/")[0] for fname in fnames]
@@ -51,12 +66,12 @@ class ArchiveReader():
         return name
 
     def read_metadata(self, elem_name):
-        with self.open(elem_name) as file:
+        with self.read(elem_name) as file:
             metadata = json.load(file)
         return metadata
 
     def get_session_name_from_id(self,id):
-        elem_name = self.get_metadata_fname_from_id(id)
+        elem_name = self.get_metadata_name_from_id(id)
         session_name = self.read_session_name_from_metadata(elem_name)
         return session_name
 
@@ -69,4 +84,23 @@ class ArchiveReader():
         return archive_overview
 
 
+    def open_session(self, id):
+        metadata_elem_name = self.get_metadata_name_from_id(id)
+        metadata = self.read_metadata(metadata_elem_name)
+        self.open_session_id = id
+        s = Session.from_dict(metadata, self)
+        delattr(self, "open_session_id")
+        return s
 
+
+    def json_type_to_native(self, type: str, json: dict):
+        if type == "no.sintef.folder":
+            return Folder.from_dict(json, self)
+        elif type == "no.sintef.table":
+            return Datatable.from_dict(json, self)
+        elif type == "no.sintef.video":
+            return Video.from_dict(json, self)
+        elif type == "no.sintef.source":
+            return Source.from_dict(json, self)
+        else:
+            assert False, f"There does not exist a native type for {type}"

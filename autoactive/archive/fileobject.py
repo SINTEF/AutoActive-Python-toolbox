@@ -54,3 +54,6 @@ class Fileobject(Dataobject):
         meta = self.meta.__dict__
         user = self.meta.__dict__
         return {"meta":meta, "user":user}
+
+    def to_natives(self, attachments):
+        assert False, "Not implemented"

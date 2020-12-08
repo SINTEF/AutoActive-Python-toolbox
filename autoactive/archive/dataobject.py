@@ -2,6 +2,7 @@ from autoactive.datastructures.meta import Meta
 from autoactive.datastructures.user import User
 
 from dataclasses import dataclass
+from abc import abstractmethod
 
 
 @dataclass(init=False)
@@ -65,3 +66,24 @@ class Dataobject:
             if isinstance(value, Dataobject):
                 ser_obj["user"][key] = value.replace_natives(**kwargs)
         return ser_obj
+
+    @abstractmethod
+    def to_natives(self, archive_reader):
+        pass
+
+    @classmethod
+    def from_dict(cls, dict_, archive_reader):
+        obj = cls()
+        for k, v in dict_["meta"].items():
+            obj.meta.__setattr__(k, v)
+        for k, v in dict_["user"].items():
+            if isinstance(v, dict):
+                if "meta" and "user" in v.keys():
+                    v = archive_reader.json_type_to_native(v["meta"]["type"], v)
+            obj.user.__setattr__(k, v)
+        if hasattr(obj.meta,"attachments"):
+            obj.to_natives(archive_reader)
+        return obj
+
+
+

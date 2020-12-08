@@ -9,3 +9,6 @@ class Folder(Dataobject):
         super().__init__()
         self.meta.type: str = "no.sintef.folder"
         self.meta.version: int = 1
+
+    def to_natives(self, attachments):
+        assert False, "Not implemented"

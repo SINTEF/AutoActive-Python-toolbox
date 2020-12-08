@@ -74,6 +74,16 @@ class Datatable(Dataobject):
         kwargs["archive_writer"].write_table(path, self)
         return {"user": dict(), "meta": self.meta.__dict__}
 
+    def to_natives(self, archive_reader):
+        for file in self.meta.attachments:
+            df = archive_reader.read_table(archive_reader.open_session_id + file)
+            for i, column in enumerate(df.columns):
+                self.__setattr__(column, df[column].values)
+                self.user.__dict__[column].unit = self.meta.units[i]
+        delattr(self.meta, "units")
+        delattr(self.meta, "attachments")
+        return self
+
 
 @singledispatch
 def _setattr(value, name, self: Datatable) -> None:

@@ -12,4 +12,7 @@ class Source(Fileobject):
         self.meta.version: int = 1
         self.user.language: str = "PYTHON"
 
+    def to_natives(self, arhive_reader):
+        return self
+
 
