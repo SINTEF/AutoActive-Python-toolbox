@@ -39,8 +39,15 @@ class Session(Dataobject):
         elem_name = f"{self.meta.id}/AUTOACTIVE_SESSION.json"
         archive_writer.write_metadata(elem_name, json_struct)
 
-    def to_natives(self):
+    def from_serializable(self, archive_reader):
         assert False, "not implemented"
+
+    @classmethod
+    def from_dict(cls, dict_, archive_reader):
+        obj = Session.__new__(cls)
+        super().__init__(obj)
+        obj.to_natives(dict_, archive_reader)
+        return obj
 
 
 

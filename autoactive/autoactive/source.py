@@ -12,7 +12,15 @@ class Source(Fileobject):
         self.meta.version: int = 1
         self.user.language: str = "PYTHON"
 
-    def to_natives(self, arhive_reader):
+    def from_serializable(self, archive_reader):
         return self
+
+    @classmethod
+    def from_dict(cls, dict_, archive_reader):
+        obj = Source.__new__(cls)
+        super().__init__(obj)
+        obj.to_natives(dict_, archive_reader)
+        return obj
+
 
 

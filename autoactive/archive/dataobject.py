@@ -68,12 +68,17 @@ class Dataobject:
         return ser_obj
 
     @abstractmethod
-    def to_natives(self, archive_reader):
+    def from_serializable(self, archive_reader):
         pass
 
     @classmethod
     def from_dict(cls, dict_, archive_reader):
-        obj = cls()
+        obj = Dataobject.__new__(cls)
+        obj._meta = Meta()
+        obj._user = User()
+        obj.to_natives(obj, dict_, archive_reader)
+
+    def to_natives(obj, dict_, archive_reader):
         for k, v in dict_["meta"].items():
             obj.meta.__setattr__(k, v)
         for k, v in dict_["user"].items():
@@ -82,7 +87,7 @@ class Dataobject:
                     v = archive_reader.json_type_to_native(v["meta"]["type"], v)
             obj.user.__setattr__(k, v)
         if hasattr(obj.meta,"attachments"):
-            obj.to_natives(archive_reader)
+            obj.from_serializable(archive_reader)
         return obj
 
 
