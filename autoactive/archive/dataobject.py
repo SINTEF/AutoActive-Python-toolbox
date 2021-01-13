@@ -33,7 +33,6 @@ class Dataobject:
             return self.__dict__[item]
 
     def to_serializable(self, **kwargs):
-
         """ Method which transforms the dataobject to a
         serializable object
 
@@ -43,15 +42,14 @@ class Dataobject:
 
         :returns
             dict (dict): representing the dataobject object as a dictionary
-
         """
+
         meta = self.meta.__dict__
         user = self.user.__dict__
 
         return {"meta": meta, "user": user}
 
     def replace_natives(self, **kwargs):
-
         """ Transforms the nested python objects to nested
             serializable objects
 
@@ -61,7 +59,6 @@ class Dataobject:
 
         :returns
             ser_obj (serializable):
-
         """
 
         ser_obj = self.to_serializable(**kwargs)
@@ -83,15 +80,14 @@ class Dataobject:
 
         :returns
             None
-
         """
+
         obj = Dataobject.__new__(cls)
         obj._meta = Meta()
         obj._user = User()
         obj.to_natives(obj, dict_, archive_reader)
 
     def to_natives(obj, dict_, archive_reader):
-
         """ Transforms the nested dictionary to native python
             object
 
@@ -102,7 +98,6 @@ class Dataobject:
 
         :returns
             obj (Dataobject): native python object
-
         """
 
         for k, v in dict_["meta"].items():

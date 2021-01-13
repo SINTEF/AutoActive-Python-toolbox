@@ -17,7 +17,6 @@ class Fileobject(Dataobject):
         self.meta.write_type: str = None
 
     def add_content_from_file_to_archive(self, fname):
-
         """ Method saving content from file to the aaz file.
 
         Args:
@@ -34,7 +33,6 @@ class Fileobject(Dataobject):
         return self
 
     def dataclass_to_folder(self, data) -> Folder:
-
         """ Method which transforms dictionary to folder
 
         :arg
@@ -59,6 +57,7 @@ class Fileobject(Dataobject):
         :returns
             dict (dict): represnting the Fileobject as dictionary
         """
+
         elem_path = (
             f"{self.user.file_details.user.folder}\\{self.user.file_details.user.name}"
         )
