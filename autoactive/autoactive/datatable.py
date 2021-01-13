@@ -10,15 +10,23 @@ import pandas as pd
 
 @dataclass
 class Data:
+    """ Class for storing 1d sensor data """
+
     data = None
     unit = None
 
 
 @dataclass(init=False)
 class Datatable(Dataobject):
+    """ Class for storing 1d sensor data refrencing the same time vector """
+
     @property
     def column_names(self):
-        return self.user.__dict__.keys()
+        return [
+            key
+            for (key, value) in self.user.__dict__.items()
+            if isinstance(value, Data)
+        ]
 
     @property
     def dtypes(self):
@@ -30,7 +38,7 @@ class Datatable(Dataobject):
 
     @property
     def data(self):
-        return [d.data for d in self.user.__dict__.values()]
+        return [d.data for d in self.user.__dict__.values() if isinstance(d, Data)]
 
     @property
     def as_dict(self):
@@ -52,17 +60,15 @@ class Datatable(Dataobject):
         return self.user.__dict__[item]
 
     def to_serializable(self, **kwargs):
-
         """ Method which transforms the table object to a
         serializable object
 
         :arg
-            **kwargs (dict): dictionary containing the archiveWriter
+            **kwargs (dict): Dictionary containing the archiveWriter
             uuid and the parent key
 
         :returns
-            dict (dict): representing the table object as a dictionary
-
+            dict (dict): Metadata for the table object
         """
 
         assert "time" in self.column_names, "No time column found"
@@ -75,6 +81,17 @@ class Datatable(Dataobject):
         return {"user": dict(), "meta": self.meta.__dict__}
 
     def from_serializable(self, archive_reader):
+        """ Method which transforms the serializable object to a
+        table object
+
+        :arg
+            archive_reader (ArchiveReader): object for reading data
+            from aaz file
+
+        :returns
+            self (Datatable): object storing 1d sensor data
+        """
+
         for file in self.meta.attachments:
             df = archive_reader.read_table(archive_reader.open_session_id + file)
             for i, column in enumerate(df.columns):
@@ -86,13 +103,42 @@ class Datatable(Dataobject):
 
     @classmethod
     def from_dict(cls, dict_, archive_reader):
+        """ Class constructor used when object is
+            constructed from file
+
+        :arg
+            dict_ (dict): Metadata used for creating the Datatable object
+
+            archive_reader (ArchoveReader): object for reading data
+            from aaz file
+
+        :returns
+            obj (Datatable): object storing 1d sensor data
+        """
+
         obj = Datatable.__new__(cls)
         super().__init__(obj)
         obj.to_natives(dict_, archive_reader)
         return obj
 
+
 @singledispatch
-def _setattr(value, name, self: Datatable) -> None:
+def _setattr(value, name, self) -> None:
+    """ Helper methods for __setattr__ in Datatable class, so user
+        can use . notation without having to also call meta or user.
+        If value is of type array first method is used
+        (@_setattr.register(np.ndarray)), if value is of type Meta
+        or user, the second method is called. For any other type a
+        error is thrown
+
+    :arg
+        value(np.ndarray/Meta/user): value to be set
+
+        name (str): name of attribute
+
+        self (Datatable): object storing 1d sensor data
+    """
+
     assert False, "Type not implemented"
 
 
