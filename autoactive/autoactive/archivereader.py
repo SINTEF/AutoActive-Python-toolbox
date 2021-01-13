@@ -12,17 +12,30 @@ import io
 
 
 @dataclass(frozen=True)
-class ArchiveOverview():
-    id : str = None
-    name : str = None
+class ArchiveOverview:
+    """ Stores session information
 
-class ArchiveReader():
+    :arg
+        id (str): Session id
+
+        name (str): Session name
+    """
+
+    id: str = None
+    name: str = None
+
+
+class ArchiveReader:
+    """Class for reading aaz file
+
+    :arg
+        path (Path): Path to aaz file
+    """
 
     def __init__(self, path):
         self.path = path
         self._file = zp.ZipFile(path, "r", allowZip64=True)
         self.overview = self.get_overview()
-
 
     def read(self, path):
 
@@ -43,6 +56,16 @@ class ArchiveReader():
         return original
 
     def read_table(self, elem_name):
+        """ Method for reading parquet tables
+
+        :arg
+            elem_name (str): The complete path of element inside
+            aaz file
+
+        :returns
+            df (DataFrame): Returns the parquet table as a pandas dataframe
+        """
+
         buffer = io.BytesIO()
         with self.read(elem_name) as file:
             buffer.write(file.read())
@@ -50,11 +73,26 @@ class ArchiveReader():
         return df
 
     def list_ids(self):
+        """Gets a list of session ids
+
+        :returns
+            list (list): session ids
+        """
+
         fnames = self._file.namelist()
         session_names = [fname.split("/")[0] for fname in fnames]
         return list(set(session_names))
 
     def get_metadata_name_from_id(self, id):
+        """Gets the name of the json file in session
+
+        :arg:
+            id (str): Session id
+
+        returns:
+            elem_name (str): Path to json file
+        """
+
         elem_names = self._file.namelist()
         elem_name = [ename for ename in elem_names if id in ename and ".json" in ename]
         assert len(elem_name) == 1
@@ -62,20 +100,54 @@ class ArchiveReader():
         return elem_name
 
     def read_session_name_from_metadata(self, elem_name):
+        """Reads session name
+
+        :arg
+            elem_name (str): Path to json file
+
+        :returns
+            name (str): session name
+        """
+
         name = self.read_metadata(elem_name)["user"]["name"]
         return name
 
     def read_metadata(self, elem_name):
+        """Reads metadata from file
+
+        :arg
+            elem_name (str): Path to json file
+
+        :returns
+            metadata (dict): The deserialized metadata
+        """
+
         with self.read(elem_name) as file:
             metadata = json.load(file)
         return metadata
 
-    def get_session_name_from_id(self,id):
+    def get_session_name_from_id(self, id):
+        """Gets the name of the session
+
+        :arg
+            id (str): Session id
+
+        :returns
+            session_name (str): Session name
+        """
+
         elem_name = self.get_metadata_name_from_id(id)
         session_name = self.read_session_name_from_metadata(elem_name)
         return session_name
 
     def get_overview(self):
+        """Gets sessions in aaz file
+
+        :returns
+            archove_overview (list[ArchiveOverview]): Overview of
+            sessions in aaz file
+        """
+
         archive_overview = list()
         ids = self.list_ids()
         for id in ids:
@@ -83,8 +155,17 @@ class ArchiveReader():
             archive_overview.append(ArchiveOverview(id, name))
         return archive_overview
 
-
     def open_session(self, id):
+        """Open session in aaz file
+
+        :arg
+            id (str): Session id
+
+        :returns
+            s (Dataobject): converts the aaz file into
+            a native python object
+        """
+
         metadata_elem_name = self.get_metadata_name_from_id(id)
         metadata = self.read_metadata(metadata_elem_name)
         self.open_session_id = id
@@ -92,8 +173,18 @@ class ArchiveReader():
         delattr(self, "open_session_id")
         return s
 
+    def json_type_to_native(self, type, json):
+        """Converts data from dict to native python object
 
-    def json_type_to_native(self, type: str, json: dict):
+        :arg
+            type (str): native python type
+
+            json (dict): data
+
+        returns:
+             native type
+        """
+
         if type == "no.sintef.folder":
             return Folder.from_dict(json, self)
         elif type == "no.sintef.table":
