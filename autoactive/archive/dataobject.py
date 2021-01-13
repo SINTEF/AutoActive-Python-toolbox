@@ -2,11 +2,10 @@ from autoactive.datastructures.meta import Meta
 from autoactive.datastructures.user import User
 
 from dataclasses import dataclass
-from abc import abstractmethod
-
 
 @dataclass(init=False)
 class Dataobject:
+    """ Parent class for all dataobjects """
     def __init__(self):
         self._meta: Meta = Meta()
         self._user: User = User()
@@ -58,6 +57,9 @@ class Dataobject:
             **kwargs (dict): dictionary containing the archiveWriter
             uuid and the parent key
 
+        :returns
+            ser_obj (serializable):
+
         """
 
         ser_obj = self.to_serializable(**kwargs)
@@ -67,18 +69,42 @@ class Dataobject:
                 ser_obj["user"][key] = value.replace_natives(**kwargs)
         return ser_obj
 
-    @abstractmethod
-    def from_serializable(self, archive_reader):
-        pass
 
     @classmethod
     def from_dict(cls, dict_, archive_reader):
+        """ Constructor when transforming nested dictionary
+            to native python object
+
+        :arg
+            dict_ (dict):
+
+            archive_reader (ArchiveReader):
+
+        :returns
+            None
+
+        """
         obj = Dataobject.__new__(cls)
         obj._meta = Meta()
         obj._user = User()
         obj.to_natives(obj, dict_, archive_reader)
 
+
     def to_natives(obj, dict_, archive_reader):
+
+        """ Transforms the nested dictionary to native python
+            object
+
+        :arg
+            dict_ (dict):
+
+            archive_reader (ArchiveReader):
+
+        :returns
+            obj (Dataobject): native python object
+
+        """
+
         for k, v in dict_["meta"].items():
             obj.meta.__setattr__(k, v)
         for k, v in dict_["user"].items():
@@ -89,6 +115,7 @@ class Dataobject:
         if hasattr(obj.meta,"attachments"):
             obj.from_serializable(archive_reader)
         return obj
+
 
 
 
