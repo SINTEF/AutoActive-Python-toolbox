@@ -3,9 +3,11 @@ from autoactive.datastructures.user import User
 
 from dataclasses import dataclass
 
+
 @dataclass(init=False)
 class Dataobject:
     """ Parent class for all dataobjects """
+
     def __init__(self):
         self._meta: Meta = Meta()
         self._user: User = User()
@@ -69,7 +71,6 @@ class Dataobject:
                 ser_obj["user"][key] = value.replace_natives(**kwargs)
         return ser_obj
 
-
     @classmethod
     def from_dict(cls, dict_, archive_reader):
         """ Constructor when transforming nested dictionary
@@ -88,7 +89,6 @@ class Dataobject:
         obj._meta = Meta()
         obj._user = User()
         obj.to_natives(obj, dict_, archive_reader)
-
 
     def to_natives(obj, dict_, archive_reader):
 
@@ -112,10 +112,6 @@ class Dataobject:
                 if "meta" and "user" in v.keys():
                     v = archive_reader.json_type_to_native(v["meta"]["type"], v)
             obj.user.__setattr__(k, v)
-        if hasattr(obj.meta,"attachments"):
+        if hasattr(obj.meta, "attachments"):
             obj.from_serializable(archive_reader)
         return obj
-
-
-
-
