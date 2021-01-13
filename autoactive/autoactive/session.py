@@ -11,6 +11,8 @@ import os
 
 @dataclass(init=False)
 class Session(Dataobject):
+    """ Class respresenting a session """
+
     def __init__(self, session_name: str = None):
         super().__init__()
         self.meta.type = "no.sintef.session"
@@ -21,12 +23,11 @@ class Session(Dataobject):
         self.user.name = session_name
 
     def save(self, archive_writer):
-
         """ Method saves the session object to the archive
 
         :arg
-            archive_writer (ArchiveWriter): object handle to
-            archiveWriter
+            archive_writer (ArchiveWriter): Object used for writing
+            to aaz file
 
         """
 
@@ -39,23 +40,38 @@ class Session(Dataobject):
         elem_name = f"{self.meta.id}/AUTOACTIVE_SESSION.json"
         archive_writer.write_metadata(elem_name, json_struct)
 
-    def from_serializable(self, archive_reader):
+    def from_serializable(self, _):
+        """ Overwrites the implementation in Dataobject,
+            method should not be used
+        """
+
         assert False, "not implemented"
 
     @classmethod
     def from_dict(cls, dict_, archive_reader):
+        """ Class constructor used when object is
+            constructed from file
+
+        :arg
+            dict_ (dict): Metadata used for creating the Session folder
+
+            archive_reader (ArchiveReader): Object used for reading data
+            from aaz file
+
+        :returns
+            obj (Session): Object representing a session
+        """
+
         obj = Session.__new__(cls)
         super().__init__(obj)
         obj.to_natives(dict_, archive_reader)
         return obj
 
 
-
-
 @dataclass()
 class Enviroment:
 
-    """Class containting information about the computer enviroment"""
+    """ Class containting information about the computer enviroment """
 
     platform: str = platform.platform()
     computername: str = os.environ["COMPUTERNAME"]
