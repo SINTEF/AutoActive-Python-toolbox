@@ -8,6 +8,8 @@ from pathlib import Path
 
 @dataclass(init=False)
 class Fileobject(Dataobject):
+    """ Parent class for all fileobjects """
+
     def __init__(self):
         super().__init__()
         self.type: str = None
@@ -22,7 +24,8 @@ class Fileobject(Dataobject):
             fname (Path) : The full path of the file
 
         Returns:
-            self (Source) : Returns the source object """
+            self (Source) : Returns the source object
+        """
 
         self.user.file_name_full = str(fname)
         file_details = Fileinfo(fname)
@@ -39,7 +42,6 @@ class Fileobject(Dataobject):
 
         :returns
             folder (Folder): folder object
-
         """
 
         folder = Folder()
@@ -47,11 +49,24 @@ class Fileobject(Dataobject):
         return folder
 
     def to_serializable(self, **kwargs):
-        elem_path = f"{self.user.file_details.user.folder}\\{self.user.file_details.user.name}"
+        """ Method which transforms the dataobject to a
+        serializable object
+
+        :args:
+            **kwargs (dict): dictionary containing the archiveWriter,
+            uuid and the parent key
+
+        :returns
+            dict (dict): represnting the Fileobject as dictionary
+        """
+        elem_path = (
+            f"{self.user.file_details.user.folder}\\{self.user.file_details.user.name}"
+        )
         path = f"{kwargs['uuid']}/{kwargs['parent_key']}/{self.user.file_details.user.name}"
-        self.meta.attachments = [f"/{kwargs['parent_key']}/{self.user.file_details.user.name}"]
+        self.meta.attachments = [
+            f"/{kwargs['parent_key']}/{self.user.file_details.user.name}"
+        ]
         kwargs["archive_writer"].copy_content_from_file(elem_path, path)
         meta = self.meta.__dict__
         user = self.meta.__dict__
-        return {"meta":meta, "user":user}
-
+        return {"meta": meta, "user": user}
