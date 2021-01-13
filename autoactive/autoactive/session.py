@@ -53,7 +53,7 @@ class Session(Dataobject):
             constructed from file
 
         :arg
-            dict_ (dict): Metadata used for creating the Session folder
+            dict_ (dict): Metadata used for creating the Session object
 
             archive_reader (ArchiveReader): Object used for reading data
             from aaz file
