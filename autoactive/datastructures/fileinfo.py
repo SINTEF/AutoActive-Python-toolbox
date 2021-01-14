@@ -6,7 +6,14 @@ from dataclasses import dataclass
 
 @dataclass(init=False)
 class Fileinfo:
-    def __init__(self, fname: Path):
+    """ Storing info about the python file, the aaz file was
+        created from
+
+        :arg
+            fname (Path): Path to main file
+    """
+
+    def __init__(self, fname):
         self.name: str = fname.name
         self.folder: str = os.path.dirname(fname)
         self.isdir: int = Path.is_dir(fname)
