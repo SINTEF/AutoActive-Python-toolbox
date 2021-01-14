@@ -26,7 +26,7 @@ class ArchiveOverview:
 
 
 class ArchiveReader:
-    """Class for reading aaz file
+    """ Class for reading aaz file
 
     :arg
         path (Path): Path to aaz file
@@ -43,11 +43,11 @@ class ArchiveReader:
             of the archive as a binary file-like object
 
         :arg
-            path (str): can be either the name of a file
+            path (str): Can be either the name of a file
             within the archive or a ZipInfo object
 
         :returns
-            original (zipfile): accessible member in the
+            original (zipfile): Accessible member in the
             zipfile
 
         """
@@ -73,10 +73,10 @@ class ArchiveReader:
         return df
 
     def list_ids(self):
-        """Gets a list of session ids
+        """ Gets a list of session ids
 
         :returns
-            list (list): session ids
+            (list): Session ids
         """
 
         fnames = self._file.namelist()
@@ -84,13 +84,14 @@ class ArchiveReader:
         return list(set(session_names))
 
     def get_metadata_name_from_id(self, id):
-        """Gets the name of the json file in session
+        """ Gets the name of the json file in session
 
         :arg:
             id (str): Session id
 
         returns:
-            elem_name (str): Path to json file
+            elem_name (str): The complete path to json file inside
+            aaz file
         """
 
         elem_names = self._file.namelist()
@@ -100,26 +101,26 @@ class ArchiveReader:
         return elem_name
 
     def read_session_name_from_metadata(self, elem_name):
-        """Reads session name
+        """ Reads session name
 
         :arg
             elem_name (str): Path to json file
 
         :returns
-            name (str): session name
+            name (str): Session name
         """
 
         name = self.read_metadata(elem_name)["user"]["name"]
         return name
 
     def read_metadata(self, elem_name):
-        """Reads metadata from file
+        """ Reads metadata from file
 
         :arg
             elem_name (str): Path to json file
 
         :returns
-            metadata (dict): The deserialized metadata
+            metadata (dict): The deserialized json file
         """
 
         with self.read(elem_name) as file:
@@ -127,7 +128,7 @@ class ArchiveReader:
         return metadata
 
     def get_session_name_from_id(self, id):
-        """Gets the name of the session
+        """ Gets the name of the session
 
         :arg
             id (str): Session id
@@ -141,10 +142,10 @@ class ArchiveReader:
         return session_name
 
     def get_overview(self):
-        """Gets sessions in aaz file
+        """ Gets sessions in aaz file
 
         :returns
-            archove_overview (list[ArchiveOverview]): Overview of
+            archive_overview (list[ArchiveOverview]): Overview of
             sessions in aaz file
         """
 
@@ -156,14 +157,14 @@ class ArchiveReader:
         return archive_overview
 
     def open_session(self, id):
-        """Open session in aaz file
+        """ Open session in aaz file
 
         :arg
             id (str): Session id
 
         :returns
-            s (Dataobject): converts the aaz file into
-            a native python object
+            s (session): A pythonic representation of the
+            aaz file
         """
 
         metadata_elem_name = self.get_metadata_name_from_id(id)
@@ -174,7 +175,7 @@ class ArchiveReader:
         return s
 
     def json_type_to_native(self, type, json):
-        """Converts data from dict to native python object
+        """ Converts data from dict to native python object
 
         :arg
             type (str): native python type
@@ -182,7 +183,7 @@ class ArchiveReader:
             json (dict): data
 
         returns:
-             native type
+             (Dataobject): Pythonic representation of data
         """
 
         if type == "no.sintef.folder":

@@ -28,8 +28,9 @@ class Source(Fileobject):
             from aaz file
 
         :returns
-            obj (Session): Object representing the source
+            obj (Session): Pythonic representation of source information
         """
+
         obj = Source.__new__(cls)
         super().__init__(obj)
         obj.to_natives(dict_, archive_reader)

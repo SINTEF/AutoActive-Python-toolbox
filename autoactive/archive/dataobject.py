@@ -37,11 +37,11 @@ class Dataobject:
         serializable object
 
         :arg
-            **kwargs (dict): dictionary containing the archiveWriter,
+            **kwargs (dict): Dictionary containing the archiveWriter,
             uuid and the parent key
 
         :returns
-            dict (dict): representing the dataobject object as a dictionary
+            dict (dict): Representing the dataobject as a dictionary
         """
 
         meta = self.meta.__dict__
@@ -54,11 +54,12 @@ class Dataobject:
             serializable objects
 
         :arg
-            **kwargs (dict): dictionary containing the archiveWriter
+            **kwargs (dict): Dictionary containing the archiveWriter
             uuid and the parent key
 
         :returns
-            ser_obj (serializable):
+            ser_obj (serializable): Representing the dataobject as
+            a serializable object
         """
 
         ser_obj = self.to_serializable(**kwargs)
@@ -74,30 +75,33 @@ class Dataobject:
             to native python object
 
         :arg
-            dict_ (dict):
+            dict_ (dict): Metadata used to create the dataobject
 
-            archive_reader (ArchiveReader):
+            archive_reader (ArchiveReader): Object used for reading
+            from aaz file
 
         :returns
-            None
+            obj (Dataobject): Pythonic representation of the dataobject.
         """
 
         obj = Dataobject.__new__(cls)
         obj._meta = Meta()
         obj._user = User()
         obj.to_natives(obj, dict_, archive_reader)
+        return obj
 
     def to_natives(obj, dict_, archive_reader):
         """ Transforms the nested dictionary to native python
             object
 
         :arg
-            dict_ (dict):
+            dict_ (dict): Metadata used to create the dataobject.
 
-            archive_reader (ArchiveReader):
+            archive_reader (ArchiveReader): Object used for reading
+            from aaz file
 
         :returns
-            obj (Dataobject): native python object
+            obj (Dataobject): Pythonic representation of the dataobject
         """
 
         for k, v in dict_["meta"].items():

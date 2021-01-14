@@ -20,10 +20,11 @@ class Fileobject(Dataobject):
         """ Method saving content from file to the aaz file.
 
         Args:
-            fname (Path) : The full path of the file
+            fname (Path): The full path of the file
 
         Returns:
-            self (Source) : Returns the source object
+            self (Source): Object containing information
+            about data source in aaz file
         """
 
         self.user.file_name_full = str(fname)
@@ -36,10 +37,10 @@ class Fileobject(Dataobject):
         """ Method which transforms dictionary to folder
 
         :arg
-            data (Datatable): data to be transformed
+            data (Datatable): Data to be transformed
 
         :returns
-            folder (Folder): folder object
+            folder (Folder): Folder object
         """
 
         folder = Folder()
@@ -51,11 +52,11 @@ class Fileobject(Dataobject):
         serializable object
 
         :args:
-            **kwargs (dict): dictionary containing the archiveWriter,
+            **kwargs (dict): Dictionary containing the archiveWriter,
             uuid and the parent key
 
         :returns
-            dict (dict): represnting the Fileobject as dictionary
+            dict (dict): Representing the Fileobject as a dictionary
         """
 
         elem_path = (

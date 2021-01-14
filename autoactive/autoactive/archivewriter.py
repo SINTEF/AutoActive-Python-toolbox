@@ -5,7 +5,7 @@ import json
 
 
 class ArchiveWriter:
-    """Class for writing aaz file
+    """ Class for writing and creating an aaz file
 
     :arg
         path (Path): Path to new aaz file
@@ -19,11 +19,11 @@ class ArchiveWriter:
             of the archive as a binary file-like object
 
         :arg
-            path (Path): can be either the name of a file
+            path (Path): Can be either the name of a file
             within the archive or a ZipInfo object
 
         :returns
-            original (zipfile): accessible member in the
+            original (zipfile): Accessible member in the
             zipfile
         """
 
@@ -31,7 +31,7 @@ class ArchiveWriter:
         return original
 
     def close(self):
-        """ Method that destroys the object """
+        """ Method that closes the aaz file """
 
         self._file.close()
 
@@ -39,7 +39,8 @@ class ArchiveWriter:
         """ Method saving the session to archive
 
         :arg
-            session_handle (Session): The session object
+            session_handle (Session): Pythonic representation of
+            the session
         """
 
         session_handle.save(self)
@@ -51,7 +52,8 @@ class ArchiveWriter:
             elem_name (str): The complete path in archive where
             the json object is stored
 
-            jsonStruct (dict): serializable object
+            jsonStruct (dict): Json object to be stored in the
+            aaz file
         """
 
         with self.open(elem_name) as file:
@@ -59,13 +61,14 @@ class ArchiveWriter:
 
     def write_table(self, elem_name, table):
         """ Method transforming table object to
-            parquet object and stores it in the archive.
+            parquet object and stores it in the aaz file
 
         :arg
             elem_name (str): The complete path in archive where
             the table object is stored
 
-            table (Datatable): The table object
+            table (Datatable): Object storing 1d sensor data
+            referencing the same timeline
         """
 
         column_names = table.column_names
@@ -81,12 +84,12 @@ class ArchiveWriter:
             parquet_writer.close()
 
     def copy_content_from_file(self, data, elem_name):
-        """Copies content from file
+        """ Copies content from file
 
             :arg
                 data (str): Path to data to be copied
 
-                elem_name (str): The complete path in archove where
+                elem_name (str): The complete path in archive where
                 the object is to be copied to
         """
 
@@ -94,8 +97,8 @@ class ArchiveWriter:
 
 
 def to_parquet_types(type):
-    """Method for converting native types
-    into parquet types
+    """ Method for converting native types
+        into parquet types
 
     :arg
         type (Type) :

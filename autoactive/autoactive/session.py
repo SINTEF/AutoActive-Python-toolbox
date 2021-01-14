@@ -23,7 +23,7 @@ class Session(Dataobject):
         self.user.name = session_name
 
     def save(self, archive_writer):
-        """ Method saves the session object to the archive
+        """ Method saves the session object to aaz file
 
         :arg
             archive_writer (ArchiveWriter): Object used for writing
@@ -59,7 +59,7 @@ class Session(Dataobject):
             from aaz file
 
         :returns
-            obj (Session): Object representing a session
+            obj (Session): Pythonic representation of a session
         """
 
         obj = Session.__new__(cls)

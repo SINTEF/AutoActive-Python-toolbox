@@ -10,7 +10,7 @@ class Fileinfo:
         created from
 
         :arg
-            fname (Path): Path to main file
+            fname (Path): Path to main python file
     """
 
     def __init__(self, fname):

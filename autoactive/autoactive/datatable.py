@@ -61,7 +61,7 @@ class Datatable(Dataobject):
 
     def to_serializable(self, **kwargs):
         """ Method which transforms the table object to a
-        serializable object
+            serializable object
 
         :arg
             **kwargs (dict): Dictionary containing the archiveWriter
@@ -85,11 +85,12 @@ class Datatable(Dataobject):
         table object
 
         :arg
-            archive_reader (ArchiveReader): object for reading data
+            archive_reader (ArchiveReader): Object for reading data
             from aaz file
 
         :returns
-            self (Datatable): object storing 1d sensor data
+            self (Datatable): Object storing 1d sensor data
+            referencing the same timeline
         """
 
         for file in self.meta.attachments:
@@ -109,11 +110,12 @@ class Datatable(Dataobject):
         :arg
             dict_ (dict): Metadata used for creating the Datatable object
 
-            archive_reader (ArchoveReader): object for reading data
+            archive_reader (ArchiveReader): Object for reading data
             from aaz file
 
         :returns
-            obj (Datatable): object storing 1d sensor data
+            obj (Datatable): Object storing 1d sensor data
+            referencing the same timeline
         """
 
         obj = Datatable.__new__(cls)
@@ -132,11 +134,11 @@ def _setattr(value, name, self) -> None:
         error is thrown
 
     :arg
-        value(np.ndarray/Meta/user): value to be set
+        value(np.ndarray/Meta/user): Value to be set
 
-        name (str): name of attribute
+        name (str): Name of attribute
 
-        self (Datatable): object storing 1d sensor data
+        self (Datatable): Object storing 1d sensor data
     """
 
     assert False, "Type not implemented"
