@@ -1,14 +1,41 @@
+""" A test script for reading aaz files"""
+
 import sys
 
 sys.path.insert(0, "..")
-
 from autoactive.autoactive.archivereader import ArchiveReader
 
 from pathlib import Path
+from argparse import ArgumentParser
 
-fname = Path(
-    r"C:\Users\kasperb\Documents\Projects\AutoActive\Kode\autoactive-python\examples\DOESITWORK.aaz"
-)
-ar = ArchiveReader(fname)
-ids = ar.list_ids()
-s = ar.open_session(ids[0])
+
+def main(fname):
+    """ Reads the aaz file and returns the first session in the file
+
+    :arg
+        fname (Path): Path to aaz file
+
+    :returns
+        sess (Session): Session object. A pythonic representation of the
+        aaz file
+    """
+
+    ar = ArchiveReader(fname)
+    ids = ar.list_ids()
+    sess = ar.open_session(ids[0])
+    return sess
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser()
+    parser.add_argument("fname")
+    args = parser.parse_args()
+
+    fname = Path(args.fname)
+    assert fname.exists(), (
+        f"{fname} does not exist. You can use the write_archive_sine.py to"
+        f"create a aaz file"
+    )
+    assert fname.is_file(), f"{fname} is not a file"
+
+    sess = main(fname)
