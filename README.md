@@ -42,4 +42,3 @@ There are a couple of pressing issues
 	3. Implement error handling
 	4. Handle Gaitup and catapult imports as these are very common sensors used in sports.
 	5. Implemet archivewriter and archivereader with context managers
-	6. Finish implementing source
