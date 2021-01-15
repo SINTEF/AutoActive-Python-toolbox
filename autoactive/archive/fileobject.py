@@ -68,5 +68,5 @@ class Fileobject(Dataobject):
         ]
         kwargs["archive_writer"].copy_content_from_file(elem_path, path)
         meta = self.meta.__dict__
-        user = self.meta.__dict__
+        user = self.user.__dict__
         return {"meta": meta, "user": user}
