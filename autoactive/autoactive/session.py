@@ -1,7 +1,6 @@
 from autoactive.archive.dataobject import Dataobject
 from autoactive.toolboxinfo import toolbox_version
 
-
 from datetime import datetime
 from dataclasses import dataclass
 import uuid
