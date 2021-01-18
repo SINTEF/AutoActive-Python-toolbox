@@ -10,7 +10,7 @@ class Video(Fileobject):
         self.meta.type = "no.sintef.video"
         self.meta.version = 1
 
-    def toSerializable(self, **kwargs):
+    def to_serializable(self, **kwargs):
 
         """ Method which transforms the video object to a
         serializable object
@@ -27,5 +27,5 @@ class Video(Fileobject):
         self.meta.time_scale = 1
         self.meta.start_time = 0
         self.meta.is_world_clock = False
-        video_obj_json = super().toSerializable(**kwargs)
+        video_obj_json = super().to_serializable(**kwargs)
         return video_obj_json
