@@ -53,6 +53,7 @@ class Video(Fileobject):
 
             fname (Path): Path for where to copy video
         """
+        
         assert hasattr(self.meta, "attachments"), "No attachment exist for obj"
         assert (
             len(self.meta.attachments) == 1
