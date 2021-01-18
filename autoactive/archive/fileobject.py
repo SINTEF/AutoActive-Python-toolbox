@@ -19,7 +19,7 @@ class Fileobject(Dataobject):
     def add_content_from_file_to_archive(self, fname):
         """ Method saving content from file to the aaz file.
 
-        Args:
+        args:
             fname (Path): The full path of the file
 
         Returns:
@@ -32,6 +32,23 @@ class Fileobject(Dataobject):
         self.user.file_details = self.dataclass_to_folder(file_details)
         self.meta.write_type = "from_file"
         return self
+
+    def load_content_from_archive_to_file(self, archive_reader, fname):
+        """ Copies video to file
+
+        :arg
+            archive_reader (ArchiveReader): Object used for reading data
+            from aaz file
+
+            fname (Path): Path for where to copy content
+        """
+
+        assert hasattr(self.meta, "attachments"), "No attachment exist for obj"
+        assert (
+            len(self.meta.attachments) == 1
+        ), "There must be exactly one attachment in one object"
+        for elem_name in self.meta.attachments:
+            archive_reader.copy_content_to_file(elem_name, fname)
 
     def dataclass_to_folder(self, data) -> Folder:
         """ Method which transforms dictionary to folder

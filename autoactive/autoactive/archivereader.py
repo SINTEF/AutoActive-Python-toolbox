@@ -171,7 +171,6 @@ class ArchiveReader:
         metadata = self.read_metadata(metadata_elem_name)
         self.open_session_id = id
         s = Session.from_dict(metadata, self)
-        delattr(self, "open_session_id")
         return s
 
     def json_type_to_native(self, type, json):
@@ -196,3 +195,17 @@ class ArchiveReader:
             return Source.from_dict(json, self)
         else:
             assert False, f"There does not exist a native type for {type}"
+
+    def copy_content_to_file(self, elem_name, fname):
+        """ Copies content from archive to file
+
+        :arg
+            elem_name (str): The complete path to file
+            inside aaz file
+
+            fname (Path): directory for where to copy
+            the file
+        """
+
+        elem_name = f"{self.open_session_id}{elem_name}"
+        self._file.extract(elem_name, fname)

@@ -43,3 +43,19 @@ class Video(Fileobject):
         obj._user = User()
         obj.to_natives(dict_, archive_reader)
         return obj
+
+    def copy_video_to_file(self, archive_reader, fname):
+        """ Copies video to file
+
+        :arg
+            archive_reader (ArchiveReader): Object used for reading data
+            from aaz file
+
+            fname (Path): Path for where to copy video
+        """
+        assert hasattr(self.meta, "attachments"), "No attachment exist for obj"
+        assert (
+            len(self.meta.attachments) == 1
+        ), "There must be exactly one video in one object"
+        for elem_name in self.meta.attachments:
+            archive_reader.copy_content_to_file(elem_name, fname)
