@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from functools import singledispatch
 import numpy as np
 import pandas as pd
+from uuid import uuid4
 
 
 @dataclass
@@ -34,6 +35,8 @@ class Datatable(Dataobject):
 
     @property
     def units(self):
+        for d in self.user.__dict__.values():
+            a = d.unit
         return [d.unit for d in self.user.__dict__.values()]
 
     @property
@@ -73,8 +76,9 @@ class Datatable(Dataobject):
 
         assert "time" in self.column_names, "No time column found"
         assert self.time.unit != None, "The time column must have a unit"
-        path = f"{str(kwargs['uuid'])}/data/{str(kwargs['parent_key'])}.parquet"
-        self.meta.attachments = [f"/data/{str(kwargs['parent_key'])}.parquet"]
+        file_ending = uuid4()
+        path = f"{str(kwargs['uuid'])}/data/{str(kwargs['parent_key'])}.{file_ending}"
+        self.meta.attachments = [f"/data/{str(kwargs['parent_key'])}.{file_ending}"]
         self.meta.units = self.units
         self.meta.is_world_clock = False
         kwargs["archive_writer"].write_table(path, self)
