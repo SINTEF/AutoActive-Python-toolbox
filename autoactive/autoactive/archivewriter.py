@@ -5,7 +5,7 @@ import json
 
 
 class ArchiveWriter:
-    """ Class for writing and creating an aaz file
+    """Class for writing and creating an aaz file
 
     :arg
         path (Path): Path to new aaz file
@@ -14,8 +14,14 @@ class ArchiveWriter:
     def __init__(self, path):
         self._file = zp.ZipFile(path, "w", allowZip64=True)
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+
     def open(self, path):
-        """ Method that accesses a member
+        """Method that accesses a member
             of the archive as a binary file-like object
 
         :arg
@@ -36,7 +42,7 @@ class ArchiveWriter:
         self._file.close()
 
     def save_session(self, session_handle):
-        """ Method saving the session to archive
+        """Method saving the session to archive
 
         :arg
             session_handle (Session): Pythonic representation of
@@ -46,7 +52,7 @@ class ArchiveWriter:
         session_handle.save(self)
 
     def write_metadata(self, elem_name, json_struct):
-        """ Method saving json object to archive
+        """Method saving json object to archive
 
         :arg
             elem_name (str): The complete path in archive where
@@ -60,7 +66,7 @@ class ArchiveWriter:
             file.write(json.dumps(json_struct).encode("utf-8"))
 
     def write_table(self, elem_name, table):
-        """ Method transforming table object to
+        """Method transforming table object to
             parquet object and stores it in the aaz file
 
         :arg
@@ -84,20 +90,20 @@ class ArchiveWriter:
             parquet_writer.close()
 
     def copy_content_from_file(self, data, elem_name):
-        """ Copies content from file
+        """Copies content from file
 
-            :arg
-                data (str): Path to data to be copied
+        :arg
+            data (str): Path to data to be copied
 
-                elem_name (str): The complete path in archive where
-                the object is to be copied to
+            elem_name (str): The complete path in archive where
+            the object is to be copied to
         """
 
         self._file.write(data, elem_name)
 
 
 def to_parquet_types(type):
-    """ Method for converting native types
+    """Method for converting native types
         into parquet types
 
     :arg

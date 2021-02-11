@@ -38,7 +38,6 @@ If you whish to contribute to the project please follow these guidelines:
 # TODO
 There are a couple of pressing issues
 	1. Session Object returned from ArchiveReader should be immutable
-	2. Implement reading and writing of videos.
-	3. Implement error handling
-	4. Handle Gaitup and Catapult imports as these are very common sensors used in sports.
-	5. Implement archivewriter and archivereader with context managers
+	2. Implement error handling
+	3. Handle Gaitup and Catapult imports as these are very common sensors used in sports.
+

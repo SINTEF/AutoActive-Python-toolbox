@@ -2,7 +2,8 @@
     and saving the session to a aaz file """
 
 import sys
-sys.path.insert(0,"..")
+
+sys.path.insert(0, "..")
 
 from autoactive.autoactive.source import Source
 from autoactive.autoactive.datatable import Datatable
@@ -15,21 +16,21 @@ from pathlib import Path
 import numpy as np
 from argparse import ArgumentParser
 
+
 def save_session(session, fname):
-    """ Saves session to file
+    """Saves session to file
 
     :arg
         session (Session): session object to save to file
 
         fname (Path): Path to where to save the session object
     """
+    with ArchiveWriter(fname) as aw:
+        aw.save_session(session)
 
-    aw = ArchiveWriter(fname)
-    aw.save_session(session)
-    aw.close()
 
-def create_sample_datatable(offset = 0):
-    """ Adds sample data to datatable
+def create_sample_datatable(offset=0):
+    """Adds sample data to datatable
 
     :arg
         offset (int): Offset of timeline
@@ -49,8 +50,9 @@ def create_sample_datatable(offset = 0):
     table.cosi = cosi
     return table
 
+
 def main(fname):
-    """ Creates a session and saves it to an aaz file
+    """Creates a session and saves it to an aaz file
 
     :arg:
         fname (Path): Path to where to save the session
@@ -62,14 +64,13 @@ def main(fname):
     table = create_sample_datatable()
     table_off = create_sample_datatable(1000000)
 
-    session = Session(session_name= "Session")
+    session = Session(session_name="Session")
     session.python_data = Folder()
     session.python_data.trig = table
     session.python_data.trig_off = table_off
     session.source = so
 
     save_session(session, fname)
-
 
 
 if __name__ == "__main__":

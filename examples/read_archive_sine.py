@@ -10,7 +10,7 @@ from argparse import ArgumentParser
 
 
 def main(fname):
-    """ Reads the aaz file and returns the first session in the file
+    """Reads the aaz file and returns the first session in the file
 
     :arg
         fname (Path): Path to aaz file
@@ -19,10 +19,9 @@ def main(fname):
         sess (Session): Session object. A pythonic representation of the
         aaz file
     """
-
-    ar = ArchiveReader(fname)
-    ids = ar.list_ids()
-    sess = ar.open_session(ids[0])
+    with ArchiveReader(fname) as ar:
+        ids = ar.list_ids()
+        sess = ar.open_session(ids[0])
     return sess
 
 
@@ -39,3 +38,4 @@ if __name__ == "__main__":
     assert fname.is_file(), f"{fname} is not a file"
 
     sess = main(fname)
+    print(sess)
