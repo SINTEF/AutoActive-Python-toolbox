@@ -43,7 +43,7 @@ class ArchiveReader:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
 
-    def read(self, path):
+    def _open(self, path):
 
         """Method that accesses a member
             of the archive as a binary file-like object
@@ -76,7 +76,7 @@ class ArchiveReader:
         """
 
         buffer = io.BytesIO()
-        with self.read(elem_name) as file:
+        with self._open(elem_name) as file:
             buffer.write(file.read())
         df = pq.read_table(buffer).to_pandas()
         return df
@@ -132,7 +132,7 @@ class ArchiveReader:
             metadata (dict): The deserialized json file
         """
 
-        with self.read(elem_name) as file:
+        with self._open(elem_name) as file:
             metadata = json.load(file)
         return metadata
 

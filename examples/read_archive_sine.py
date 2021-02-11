@@ -38,4 +38,3 @@ if __name__ == "__main__":
     assert fname.is_file(), f"{fname} is not a file"
 
     sess = main(fname)
-    print(sess)

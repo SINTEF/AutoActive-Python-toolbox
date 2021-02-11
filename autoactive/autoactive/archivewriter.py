@@ -20,7 +20,7 @@ class ArchiveWriter:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
 
-    def open(self, path):
+    def _open(self, path):
         """Method that accesses a member
             of the archive as a binary file-like object
 
@@ -62,7 +62,7 @@ class ArchiveWriter:
             aaz file
         """
 
-        with self.open(elem_name) as file:
+        with self._open(elem_name) as file:
             file.write(json.dumps(json_struct).encode("utf-8"))
 
     def write_table(self, elem_name, table):
@@ -84,7 +84,7 @@ class ArchiveWriter:
         schema = pa.schema(fields)
         table = pa.Table.from_pandas(table.as_dataframe, schema)
 
-        with self.open(elem_name) as file:
+        with self._open(elem_name) as file:
             parquet_writer = pq.ParquetWriter(file, schema)
             parquet_writer.write_table(table)
             parquet_writer.close()
