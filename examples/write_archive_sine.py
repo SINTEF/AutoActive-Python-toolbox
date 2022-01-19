@@ -11,7 +11,6 @@ from autoactive.autoactive.session import Session
 from autoactive.autoactive.folder import Folder
 from autoactive.autoactive.archivewriter import ArchiveWriter
 
-import __main__
 from pathlib import Path
 import numpy as np
 from argparse import ArgumentParser
@@ -58,7 +57,7 @@ def main(fname):
         fname (Path): Path to where to save the session
     """
     so = Source()
-    this_path = Path(__main__.__file__)
+    this_path = Path(__file__).resolve()
     so.add_content_from_file_to_archive(this_path)
 
     table = create_sample_datatable()
