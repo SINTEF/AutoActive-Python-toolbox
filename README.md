@@ -18,7 +18,7 @@ Apache License Version 2.0
 
 # Installation
 To use the AutoActive Python package you need to clone this repository and import it into
-your projects of intereset.
+your projects of interest.
 
 # Examples
 There are today two example files in the repository, where the first is an example script to shown how to
