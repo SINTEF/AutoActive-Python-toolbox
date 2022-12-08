@@ -26,7 +26,7 @@ class Annotation(Dataobject):
                                                   'tag': tag,
                                                   'comment': comment}
 
-    def toJsonStructRec(self, sessionId, archiveWriter: ArchiveWriter):
+    def toJsonStructRec(self, sessionId: str, archiveWriter: ArchiveWriter):
         # annotations are stored in a separate file
         fileName = path.join(sessionId, 'Annotations\\Annotations.json')
 
