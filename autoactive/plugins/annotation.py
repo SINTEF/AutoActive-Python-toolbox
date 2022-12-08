@@ -1,5 +1,4 @@
 from os import path
-import json
 from dataclasses import dataclass
 
 from autoactive.archive.dataobject import Dataobject
@@ -21,8 +20,6 @@ class Annotation(Dataobject):
     def addAnnotation(self, timestamp, annotationId: int):
         self.user.annotations.append({"timestamp": timestamp,
                                       "type": annotationId})
-        #self.user.annotations['timestamp'].append(timestamp)
-        #self.user.annotations['type'].append(annotationId)
 
     def setAnnotationInfo(self, annotationId: int, name: str, tag: str, comment: str):
         #assert annotationId in self.user.annotations['type'], "No annotations with this annotationId"
@@ -35,7 +32,6 @@ class Annotation(Dataobject):
         fileName = path.join(sessionId, 'Annotations\\Annotations.json')
 
         # TODO: assert that all annotationInfo entries are type char (necessary?)
-        # TODO: convert annotation keys to char (for json storage) (not necessary, json-package handles it?)
 
         annotationsDict = {'AutoActiveType': self.meta.AutoActiveType,
                            'is_world_synchronized': self.user.isWorldSynchronized,
@@ -43,7 +39,6 @@ class Annotation(Dataobject):
                            'annotation_info': self.user.annotationInfo,
                            'annotations': self.user.annotations
                            }
-        #jsonAnnotations = json.dumps(annotationsDict)
         archiveWriter.write_metadata(fileName, annotationsDict)
 
     # TODO: add method to read from json
