@@ -22,7 +22,6 @@ class Annotation(Dataobject):
                                       "type": annotationId})
 
     def setAnnotationInfo(self, annotationId: int, name: str, tag: str, comment: str):
-        #assert annotationId in self.user.annotations['type'], "No annotations with this annotationId"
         self.user.annotationInfo[annotationId] = {'name': name,
                                                   'tag': tag,
                                                   'comment': comment}
