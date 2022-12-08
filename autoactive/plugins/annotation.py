@@ -45,3 +45,5 @@ class Annotation(Dataobject):
                            }
         #jsonAnnotations = json.dumps(annotationsDict)
         archiveWriter.write_metadata(fileName, annotationsDict)
+
+    # TODO: add method to read from json
