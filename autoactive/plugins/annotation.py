@@ -40,6 +40,10 @@ class Annotation(Dataobject):
                            'annotations': self.user.annotations
                            }
         archiveWriter.write_metadata(fileName, annotationsDict)
+        self.user.__delattr__('annotations')
+        self.user.__delattr__('annotationInfo')
+        self.user.__delattr__('isWorldSynchronized')
+        self.meta.attachments = ['/Annotations/Annotations.json']
 
     def from_serializable(self, archive_reader):
         """ Method which transforms the serializable object to an

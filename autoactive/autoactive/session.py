@@ -35,10 +35,6 @@ class Session(Dataobject):
         self.meta.enviroment = Enviroment().__dict__
         if ('AnnotationProvider' in self.user.__dict__.keys()):
             self.user.AnnotationProvider.toJsonStructRec(self.meta.id, archive_writer)
-            self.user.AnnotationProvider.user.__delattr__('annotations')
-            self.user.AnnotationProvider.user.__delattr__('annotationInfo')
-            self.user.AnnotationProvider.user.__delattr__('isWorldSynchronized')
-            self.user.AnnotationProvider.meta.attachments = ['/Annotations/Annotations.json']
         json_struct = self.replace_natives(
             archive_writer=archive_writer, uuid=self.meta.id
         )
