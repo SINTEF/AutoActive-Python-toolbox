@@ -1,5 +1,6 @@
 from autoactive.archive.dataobject import Dataobject
 from autoactive.toolboxinfo import toolbox_version
+from autoactive.plugins.annotation import Annotation
 
 from datetime import datetime
 from dataclasses import dataclass
@@ -33,8 +34,9 @@ class Session(Dataobject):
         self.meta.id = str(uuid.uuid4())
         self.meta.based_on = []
         self.meta.enviroment = Enviroment().__dict__
-        if ('AnnotationProvider' in self.user.__dict__.keys()):
-            self.user.AnnotationProvider.toJsonStructRec(self.meta.id, archive_writer)
+        for val in self.user.__dict__.values():
+            if isinstance(val, Annotation):
+                val.toJsonStructRec(self.meta.id, archive_writer)
         json_struct = self.replace_natives(
             archive_writer=archive_writer, uuid=self.meta.id
         )
