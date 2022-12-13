@@ -27,6 +27,6 @@ so = Source()
 this_path = Path(__file__).resolve()
 so.add_content_from_file_to_archive(this_path)
 session.source = so
-writer.save_session(session)  # save ligger under session-klassen.
+writer.save_session(session) 
 
 print('done')
