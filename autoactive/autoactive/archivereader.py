@@ -3,6 +3,7 @@ from autoactive.autoactive.folder import Folder
 from autoactive.autoactive.datatable import Datatable
 from autoactive.datastructures.video import Video
 from autoactive.autoactive.source import Source
+from autoactive.plugins.annotation import Annotation
 
 from dataclasses import dataclass
 import json
@@ -104,7 +105,7 @@ class ArchiveReader:
         """
 
         elem_names = self._file.namelist()
-        elem_name = [ename for ename in elem_names if id in ename and ".json" in ename]
+        elem_name = [ename for ename in elem_names if id in ename and "AUTOACTIVE_SESSION.json" in ename]
         assert len(elem_name) == 1
         elem_name = elem_name[0]
         return elem_name
@@ -202,6 +203,8 @@ class ArchiveReader:
             return Video.from_dict(json, self)
         elif type == "no.sintef.source":
             return Source.from_dict(json, self)
+        elif type == "no.sintef.annotation":
+            return Annotation.from_dict(json, self)
         else:
             assert False, f"There does not exist a native type for {type}"
 

@@ -1,3 +1,4 @@
+import json
 from os import path
 from dataclasses import dataclass
 
@@ -40,4 +41,43 @@ class Annotation(Dataobject):
                            }
         archiveWriter.write_metadata(fileName, annotationsDict)
 
-    # TODO: add method to read from json
+    def from_serializable(self, archive_reader):
+        """ Method which transforms the serializable object to an
+        annotation-instance
+
+        :arg
+            archive_reader (ArchiveReader): Object for reading data
+            from aaz file
+
+        :returns
+            self (Annotation): Object storing annotations
+        """
+
+        fileName = archive_reader.open_session_id + '/Annotations/Annotations.json'
+        dict_ = archive_reader.read_metadata(fileName)
+        self.user.annotations = dict_['annotations']
+        self.user.annotationInfo = dict_['annotation_info']
+        self.user.isWorldSynchronized = False
+        delattr(self.meta, "attachments")
+        return self
+
+    @classmethod
+    def from_dict(cls, dict_, archive_reader):
+        """ Class constructor used when object is
+            constructed from file
+
+        :arg
+            dict_ (dict): Metadata used for creating the Datatable object
+
+            archive_reader (ArchiveReader): Object for reading data
+            from aaz file
+
+        :returns
+            obj (Annotation): Object storing 1d sensor data
+            referencing the same timeline
+        """
+
+        obj = Annotation.__new__(cls)
+        super().__init__(obj)
+        obj.to_natives(dict_, archive_reader)
+        return obj
