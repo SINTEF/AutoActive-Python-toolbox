@@ -1,6 +1,7 @@
 import json
 from os import path
 from dataclasses import dataclass
+import numpy as np
 
 from autoactive.archive.dataobject import Dataobject
 from autoactive.autoactive.archivewriter import ArchiveWriter
@@ -19,6 +20,10 @@ class Annotation(Dataobject):
         self.user.isWorldSynchronized = False
 
     def addAnnotation(self, timestamp, annotationId: int):
+        if isinstance(timestamp, np.int32) or isinstance(timestamp, np.int64):
+            timestamp = int(timestamp)
+        if isinstance(timestamp, np.float32) or isinstance(timestamp, np.float64):
+            timestamp = int(timestamp)
         self.user.annotations.append({"timestamp": timestamp,
                                       "type": annotationId})
 
