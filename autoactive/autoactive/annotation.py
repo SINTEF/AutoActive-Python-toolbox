@@ -2,6 +2,7 @@ import json
 from os import path
 from dataclasses import dataclass
 import numpy as np
+import warnings
 
 from autoactive.archive.dataobject import Dataobject
 from autoactive.autoactive.archivewriter import ArchiveWriter
@@ -24,13 +25,19 @@ class Annotation(Dataobject):
             timestamp = int(timestamp)
         if isinstance(timestamp, np.float32) or isinstance(timestamp, np.float64):
             timestamp = int(timestamp)
+        self.assert_annotationID_compatibility(annotationId)
         self.user.annotations.append({"timestamp": timestamp,
                                       "type": annotationId})
 
     def setAnnotationInfo(self, annotationId: int, name: str, tag: str, comment: str):
+        self.assert_annotationID_compatibility(annotationId)
         self.user.annotationInfo[annotationId] = {'name': name,
                                                   'tag': tag,
                                                   'comment': comment}
+
+    def assert_annotationID_compatibility(self, annotationId: int):
+        if annotationId > 29 or annotationId < 0:
+            warnings.warn("annotationID out of range supported by ActivityPresenter (0-29).")
 
     def toJsonStructRec(self, sessionId: str, archiveWriter: ArchiveWriter):
         # annotations are stored in a separate file
