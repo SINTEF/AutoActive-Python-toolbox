@@ -16,7 +16,7 @@ annotation_provider.setAnnotationInfo(2, "navn", "tag", "kommentar")
 
 # todo: figure out how to specify time type for annotations
 
-writer = ArchiveWriter('oyvinds_arkiv.aaz')
+writer = ArchiveWriter('test_annotations.aaz')
 session = Session(session_name="Session")
 session.python_data = Folder()
 session.python_data.trig = create_sample_datatable()
