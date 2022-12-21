@@ -3,7 +3,7 @@ from autoactive.autoactive.folder import Folder
 from autoactive.autoactive.datatable import Datatable
 from autoactive.datastructures.video import Video
 from autoactive.autoactive.source import Source
-from autoactive.plugins.annotation import Annotation
+from autoactive.autoactive.annotation import Annotation
 
 from dataclasses import dataclass
 import json

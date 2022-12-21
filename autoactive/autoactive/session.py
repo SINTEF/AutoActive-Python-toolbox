@@ -1,6 +1,6 @@
 from autoactive.archive.dataobject import Dataobject
 from autoactive.toolboxinfo import toolbox_version
-from autoactive.plugins.annotation import Annotation
+from autoactive.autoactive.annotation import Annotation
 
 from datetime import datetime
 from dataclasses import dataclass

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from autoactive.plugins.annotation import Annotation
+from autoactive.autoactive.annotation import Annotation
 from autoactive.autoactive.archivewriter import ArchiveWriter
 from autoactive.autoactive.session import Session
 from autoactive.autoactive.folder import Folder
