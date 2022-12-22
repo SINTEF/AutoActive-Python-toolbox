@@ -69,12 +69,16 @@ class Annotation(Dataobject):
             self (Annotation): Object storing annotations
         """
 
-        fileName = archive_reader.open_session_id + '/Annotations/Annotations.json'
-        dict_ = archive_reader.read_metadata(fileName)
-        self.user.annotations = dict_['annotations']
-        self.user.annotationInfo = dict_['annotation_info']
-        self.user.isWorldSynchronized = False
-        delattr(self.meta, "attachments")
+        assert len(self.meta.attachments)==1, "Annotations should be stored in a singe json attachement"
+        fileName = archive_reader.open_session_id + self.meta.attachments[0]
+        try:
+            dict_ = archive_reader.read_metadata(fileName)
+            self.user.annotations = dict_['annotations']
+            self.user.annotationInfo = dict_['annotation_info']
+            self.user.isWorldSynchronized = False
+            delattr(self.meta, "attachments")
+        except:
+            warnings.warn("Could not load annotations")
         return self
 
     @classmethod
