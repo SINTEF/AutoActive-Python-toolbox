@@ -21,7 +21,9 @@ def main(fname):
     """
     with ArchiveReader(fname) as ar:
         ids = ar.list_ids()
-        sess = ar.open_session(ids[0])
+        sess = [ar.open_session(id) for id in ids]
+        if len(sess) == 1:
+            sess = sess[0]
     return sess
 
 
