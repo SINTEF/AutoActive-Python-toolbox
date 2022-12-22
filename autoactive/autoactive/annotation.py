@@ -45,7 +45,7 @@ class Annotation(Dataobject):
 
         # TODO: assert that all annotationInfo entries are type char (necessary?)
 
-        annotationsDict = {'AutoActiveType': self.meta.AutoActiveType,
+        annotationsDict = {'AutoActiveType': 'Annotation',
                            'is_world_synchronized': self.user.isWorldSynchronized,
                            'version': self.meta.version,
                            'annotation_info': self.user.annotationInfo,
