@@ -1,3 +1,5 @@
+import warnings
+
 from autoactive.autoactive.session import Session
 from autoactive.autoactive.folder import Folder
 from autoactive.autoactive.datatable import Datatable
@@ -205,6 +207,10 @@ class ArchiveReader:
             return Source.from_dict(json, self)
         elif type == "no.sintef.annotation":
             return Annotation.from_dict(json, self)
+        elif type == "no.sintef.session":
+            warnings.warn("Session within session not supported. Changing sub-session to 'folder'-class")
+            json['meta']['type'] = "no.sintef.folder"
+            return Folder.from_dict(json, self)
         else:
             assert False, f"There does not exist a native type for {type}"
 
