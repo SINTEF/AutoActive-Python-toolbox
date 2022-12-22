@@ -210,6 +210,7 @@ class ArchiveReader:
         elif type == "no.sintef.session":
             warnings.warn("Session within session not supported. Changing sub-session to 'folder'-class")
             json['meta']['type'] = "no.sintef.folder"
+            # TODO: this works as a hack to read files with sub-sessions, but they cannot be written to a new archive.
             return Folder.from_dict(json, self)
         else:
             assert False, f"There does not exist a native type for {type}"
