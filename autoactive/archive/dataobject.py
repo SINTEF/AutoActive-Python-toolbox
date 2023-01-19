@@ -1,5 +1,6 @@
 from autoactive.datastructures.meta import Meta
 from autoactive.datastructures.user import User
+import re
 
 from dataclasses import dataclass
 
@@ -107,6 +108,7 @@ class Dataobject:
         for k, v in dict_["meta"].items():
             obj.meta.__setattr__(k, v)
         for k, v in dict_["user"].items():
+            k = re.sub('\W|^(?=\d)','a', k)  # force valid variable name
             if isinstance(v, dict):
                 if "meta" and "user" in v.keys():
                     v = archive_reader.json_type_to_native(v["meta"]["type"], v)
