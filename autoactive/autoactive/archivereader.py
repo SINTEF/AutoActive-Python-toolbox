@@ -212,6 +212,11 @@ class ArchiveReader:
             json['meta']['type'] = "no.sintef.folder"
             # TODO: this works as a hack to read files with sub-sessions, but they cannot be written to a new archive.
             return Folder.from_dict(json, self)
+        elif type == "no.sintef.gaitup":
+            warnings.warn("Gaitup is currently not supported. Changing gaitup to 'folder'-class")
+            json['meta']['type'] = "no.sintef.folder"
+            # TODO: this works as a hack to read files with sub-sessions, but they cannot be written to a new archive.
+            return Folder.from_dict(json, self)
         else:
             assert False, f"There does not exist a native type for {type}"
 
