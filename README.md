@@ -24,6 +24,13 @@ Apache License Version 2.0
 To use the AutoActive Python package you need to clone this repository and import it into
 your projects of interest.
 
+# Requirements
+- pandas
+- numpy
+- pyarrow
+
+See requirements.txt
+
 # Examples
 There are two example files in the repository's example folder: "write_archive_sine.py" and "read_archive_sine.py". The first file ("write_archive_sine.py") demonstrates how to write a time series (a sine function) to an aaz-archive. The sine-function's peaks, valleys and zero-crossings are added as annotations in the aaz-archive. The second example ("read_archive_sine.py") shows how to read the archive you generated when running "write_archive_sine.py". 
 
