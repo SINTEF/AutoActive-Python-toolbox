@@ -1,5 +1,6 @@
 """ Script for creating a session with 1d sensor data
-    and saving the session to a aaz file """
+    and saving the session to a aaz file. Name of azz-file to write must be provided as input parameter.
+ Example: python .\write_archive_sine.py 'sine.aaz' """
 
 import sys
 
@@ -93,8 +94,8 @@ def main(fname):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("fname")
+    parser = ArgumentParser(description="Example script showing how to write an aaz-archive")
+    parser.add_argument("fname", help="Name of azz-file, including file path")
     args = parser.parse_args()
 
     fname = Path(args.fname)

@@ -1,4 +1,5 @@
-""" A test script for reading aaz files"""
+""" A test script for reading aaz files. Name of azz-file (including file path) must be provided as input parameter.
+ Example: python .\read_archive_sine.py '[Path-to-file]//sine.aaz' """
 
 import sys
 
@@ -28,8 +29,8 @@ def main(fname):
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser()
-    parser.add_argument("fname")
+    parser = ArgumentParser(description="Example script showing how to read an aaz-archive")
+    parser.add_argument("fname", help="Name of azz-file, including file path")
     args = parser.parse_args()
 
     fname = Path(args.fname)
