@@ -4,11 +4,15 @@ Enviroment is to ease the analysis and development of machine learning models us
 of sensors.
 
 The AutoActive Research Enviroment consists of Activity Presenter, AutoActive Python toolbox and AutoActive Matlab toolbox.
-Activity Presenter is a graphical user interface which makes it easy to synchronize, visualise and organise data
+Activity Presenter is a graphical user interface which makes it easy to synchronize, visualise, annotate and organise data
 from multiple sensors, while the overall goal of the AutoActive Python package and the AutoActive Matlab toolbox is to make
-it possible to import the preprocessed data into Python or Matlab where you can utilse all the powerfull algorithms 
+it possible to import the preprocessed data into Python or Matlab where you can utilise all the powerful algorithms 
 already implemented.The AutoActive Python package also makes it possible to write the results back to aaz files, and thereby,
 also visualising the results in Activity Presenter.
+
+A typical usecase would be supervised machine learning on time series data, where you have one or more video files
+with "ground truth" observations. In this case, the workflow would be to manually annotate the video(s) using Activity Presenter
+and then train your machine learning application by reading the annotations from the aaz-archive. Alternatively, you can manually validate predictions made by a machine learning application by writing the results to an aaz-archive using this toolbox, and then inspecting the results using Activity Presenter. 
 
 More information about the AutoActive Research Enviroment (ARE) and the aaz file type is available here:
 https://github.com/SINTEF/AutoActive-ActivityPresenter
